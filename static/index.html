@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Customer Support Classifier</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .category {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 AI Customer Support Classifier</h1>
+
+    <p class="subtitle">
+        Automatically classify customer support messages
+    </p>
+
+    <textarea
+        id="message"
+        placeholder="Enter a customer message...">
+    </textarea>
+
+    <button onclick="classifyMessage()">
+        Classify Message
+    </button>
+
+    <div id="result" class="result">
+
+        <div>Predicted Category:</div>
+
+        <div id="category" class="category"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function classifyMessage() {
+
+    const message = document.getElementById("message").value.trim();
+
+    const result = document.getElementById("result");
+    const category = document.getElementById("category");
+
+    if (!message) {
+        result.style.display = "block";
+        category.innerHTML = "Please enter a message.";
+        category.className = "category error";
+        return;
+    }
+
+    category.className = "category";
+    category.innerHTML = "Classifying...";
+    result.style.display = "block";
+
+    try {
+
+        const response = await fetch("/predict", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                text: message
+            })
+
+        });
+
+        if (!response.ok) {
+            throw new Error("API request failed");
+        }
+
+        const data = await response.json();
+
+        category.innerHTML = data.category;
+
+    } catch (error) {
+
+        category.className = "category error";
+
+        category.innerHTML =
+            "Unable to connect to the prediction API.";
+
+    }
+}
+
+</script>
+
+</body>
+</html>

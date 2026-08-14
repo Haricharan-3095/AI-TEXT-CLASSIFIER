@@ -54,21 +54,21 @@ The trained model and vectorizer are saved using Joblib.
 ```text
 Customer Support Dataset
           ↓
-Data Preprocessing
+  Data Preprocessing
           ↓
-TF-IDF Vectorization
+ TF-IDF Vectorization
           ↓
-Logistic Regression
+  Logistic Regression
           ↓
-Model Evaluation
+  Model Evaluation
           ↓
-Hyperparameter Tuning
+ Hyperparameter Tuning
           ↓
-Final Model
+     Final Model
           ↓
-FastAPI
+       FastAPI
           ↓
-Web UI
+       Web UI
 
 
 🌐 Application Architecture
